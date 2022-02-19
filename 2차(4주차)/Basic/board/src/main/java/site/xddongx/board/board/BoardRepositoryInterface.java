@@ -7,6 +7,6 @@ public interface BoardRepositoryInterface {
     boolean save(BoardDto dto);
     List<BoardDto> findAll();
     BoardDto findById(int id);
-    boolean update(int id, BoardDto dto);
-    boolean delete(int id);
+    boolean updateBoard(int id, BoardDto dto);
+    boolean deleteBoard(int id);
 }

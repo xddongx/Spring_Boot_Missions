@@ -4,13 +4,16 @@ import lombok.Getter;
 import lombok.Setter;
 import site.xddongx.board.post.PostDto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
 public class BoardDto {
+    static int count;
+    private int id;
     private String title;
-    private List<PostDto> postList;
+    private List<PostDto> postList = new ArrayList<>();
 
     public BoardDto() {
     }
@@ -22,7 +25,8 @@ public class BoardDto {
     @Override
     public String toString() {
         return "BoardDto{" +
-                "title='" + title + '\'' +
+                "id=" + id +
+                ", title='" + title + '\'' +
                 ", postList=" + postList +
                 '}';
     }

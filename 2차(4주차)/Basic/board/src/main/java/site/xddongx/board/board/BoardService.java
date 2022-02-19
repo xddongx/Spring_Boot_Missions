@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 public class BoardService implements BoardServiceInterface {
     private static final Logger logger = LoggerFactory.getLogger(BoardService.class);
@@ -32,11 +33,11 @@ public class BoardService implements BoardServiceInterface {
 
     @Override
     public void updateBoard(int id, BoardDto dto) {
-        this.boardRepository.update(id, dto);
+        this.boardRepository.updateBoard(id, dto);
     }
 
     @Override
     public void deleteBoard(int id) {
-        this.boardRepository.delete(id);
+        this.boardRepository.deleteBoard(id);
     }
 }

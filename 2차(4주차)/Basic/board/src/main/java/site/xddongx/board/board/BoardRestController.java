@@ -23,7 +23,7 @@ public class BoardRestController {
      */
     @PostMapping()
     public void createBoard(@RequestBody BoardDto dto) {
-        logger.info(dto.toString());
+        logger.info("create Board");
         this.boardService.createBoard(dto);
     }
 
@@ -49,9 +49,8 @@ public class BoardRestController {
      * (PUT) http://localhost:8080/boards/{id}
      */
     @PutMapping("/{id}")
-    public void updateBoardOnt(@PathVariable("id") int id, @RequestBody BoardDto dto) {
-        logger.info("update Board One");
-        logger.info(dto.toString());
+    public void updateBoard(@PathVariable("id") int id, @RequestBody BoardDto dto) {
+        logger.info("update Board");
         this.boardService.updateBoard(id, dto);
     }
 
@@ -59,8 +58,8 @@ public class BoardRestController {
      * (DELETE) http://localhost:8080/boards/{id}
      */
     @DeleteMapping("/{id}")
-    public void deleteBoardOne(@PathVariable("id") int id) {
-        logger.info("delete Board One");
+    public void deleteBoard(@PathVariable("id") int id) {
+        logger.info("delete Board");
         this.boardService.deleteBoard(id);
     }
 
