@@ -3,7 +3,9 @@ package site.xddongx.board.post;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -20,9 +22,22 @@ public class PostRestController {
     /**
      * (POST) http://localhost:8080/posts
      */
-    @PostMapping()
-    public void createPost(@RequestBody PostDto dto) {
-        logger.info("create Post");
+    @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public void sampleMultipartPost(
+            @RequestParam("boardId") int id,
+            @RequestParam("title") String title,
+            @RequestParam("content") String content,
+            @RequestParam("writer") String writer,
+            @RequestParam("password") String password,
+            @RequestParam("file") MultipartFile multipartFile
+    ) {
+        logger.info("boardId: " + id);
+        logger.info("title: " + title);
+        logger.info("content: " + content);
+        logger.info("writer: " + writer);
+        logger.info("password: " + password);
+        logger.info("file original name: " + multipartFile.getOriginalFilename());
+        PostDto dto = new PostDto(id, title, content, writer, password, multipartFile);
         this.postService.createPost(dto);
     }
 

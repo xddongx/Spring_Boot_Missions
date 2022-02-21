@@ -7,8 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 
-import static site.xddongx.board.util.Util.selectBoard;
-
 @Repository
 public class BoardRepository implements BoardRepositoryInterface {
     private static final Logger logger = LoggerFactory.getLogger(BoardRepository.class);

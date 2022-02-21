@@ -7,8 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 
-import static site.xddongx.board.util.Util.selectBoard;
-
 @Repository
 public class BoardRepository implements BoardRepositoryInterface {
     private static final Logger logger = LoggerFactory.getLogger(BoardRepository.class);
@@ -40,7 +38,7 @@ public class BoardRepository implements BoardRepositoryInterface {
     @Override
     public boolean save(BoardDto dto) {
         dto.setId(BoardDto.count++);
-        logger.info("Repository >>> \n" + dto.toString());
+        logger.info("\nRepository >>> " + dto.toString());
         return this.boardList.add(dto);
     }
 

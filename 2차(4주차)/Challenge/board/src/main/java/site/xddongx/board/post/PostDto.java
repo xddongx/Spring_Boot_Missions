@@ -2,7 +2,7 @@ package site.xddongx.board.post;
 
 import lombok.Getter;
 import lombok.Setter;
-import site.xddongx.board.board.BoardDto;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -14,16 +14,19 @@ public class PostDto {
     private String content;
     private String writer;
     private String password;
+    private MultipartFile file;
+//    private List<MultipartFile> multipartFileList;
 
     public PostDto() {
     }
 
-    public PostDto(int boardId, String title, String content, String writer, String password) {
+    public PostDto(int boardId, String title, String content, String writer, String password, MultipartFile file) {
         this.boardId = boardId;
         this.title = title;
         this.content = content;
         this.writer = writer;
         this.password = password;
+        this.file = file;
     }
 
     @Override
@@ -35,6 +38,7 @@ public class PostDto {
                 ", content='" + content + '\'' +
                 ", writer='" + writer + '\'' +
                 ", password='" + password + '\'' +
+                ", multipartFile=" + file.getOriginalFilename() +
                 '}';
     }
 }

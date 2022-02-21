@@ -2,7 +2,6 @@ package site.xddongx.board.post;
 
 import lombok.Getter;
 import lombok.Setter;
-import site.xddongx.board.board.BoardDto;
 
 @Getter
 @Setter

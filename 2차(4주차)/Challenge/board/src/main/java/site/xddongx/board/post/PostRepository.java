@@ -5,15 +5,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import site.xddongx.board.board.BoardDto;
-import site.xddongx.board.board.BoardRepository;
-import site.xddongx.board.board.BoardService;
 import site.xddongx.board.board.BoardServiceInterface;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static site.xddongx.board.util.Util.selectBoard;
-import static site.xddongx.board.util.Util.selectPost;
 
 @Repository
 public class PostRepository implements PostRepositoryInterface {
@@ -54,11 +50,12 @@ public class PostRepository implements PostRepositoryInterface {
     public void save(PostDto dto) {
         dto.setId(PostDto.count++);
         int boardId = dto.getBoardId();
+
         BoardDto targetBoard = boardService.readBoard(boardId);     // id로 게시판 찾기
 
         targetBoard.getPostList().add(dto);             // 게시판에 게시글 추가
 
-        logger.info("Repository >>> \n" + dto.toString());
+        logger.info("\nRepository >>> " + dto.toString());
         this.postList.add(dto);
     }
 
