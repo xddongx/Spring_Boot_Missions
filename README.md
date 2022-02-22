@@ -10,7 +10,8 @@
 - - -
 ### 2차 미션 스크린샷
 #### Basic
-* ![Basic01](https://user-images.githubusercontent.com/31644115/155059403-5e6f3799-7eb2-4751-bdaf-f92fdd64aa6f.PNG
+![Basic01](https://user-images.githubusercontent.com/31644115/155059480-78d1c1aa-487a-4f67-bb4d-cb2e0d286665.PNG)
+
 
 #### Challenge
 * 사진
