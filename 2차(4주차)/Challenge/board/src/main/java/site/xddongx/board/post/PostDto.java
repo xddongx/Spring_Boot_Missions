@@ -14,19 +14,21 @@ public class PostDto {
     private String content;
     private String writer;
     private String password;
-    private MultipartFile file;
+    private String filename;
+    private String filepath;
 //    private List<MultipartFile> multipartFileList;
 
     public PostDto() {
     }
 
-    public PostDto(int boardId, String title, String content, String writer, String password, MultipartFile file) {
+    public PostDto(int boardId, String title, String content, String writer, String password, String filename, String filepath) {
         this.boardId = boardId;
         this.title = title;
         this.content = content;
         this.writer = writer;
         this.password = password;
-        this.file = file;
+        this.filename = filename;
+        this.filepath = filepath;
     }
 
     @Override
@@ -38,7 +40,8 @@ public class PostDto {
                 ", content='" + content + '\'' +
                 ", writer='" + writer + '\'' +
                 ", password='" + password + '\'' +
-                ", multipartFile=" + file.getOriginalFilename() +
+                ", filename='" + filename + '\'' +
+                ", filepath='" + filepath + '\'' +
                 '}';
     }
 }

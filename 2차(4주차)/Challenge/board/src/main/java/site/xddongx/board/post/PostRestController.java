@@ -23,7 +23,7 @@ public class PostRestController {
      * (POST) http://localhost:8080/posts
      */
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void sampleMultipartPost(
+    public void createPost(
             @RequestParam("boardId") int id,
             @RequestParam("title") String title,
             @RequestParam("content") String content,
@@ -37,8 +37,8 @@ public class PostRestController {
         logger.info("writer: " + writer);
         logger.info("password: " + password);
         logger.info("file original name: " + multipartFile.getOriginalFilename());
-        PostDto dto = new PostDto(id, title, content, writer, password, multipartFile);
-        this.postService.createPost(dto);
+        PostDto dto = new PostDto(id, title, content, writer, password, null, null);
+        this.postService.createPost(dto, multipartFile);
     }
 
     /**

@@ -12,5 +12,7 @@
     <!-- 게시글에 이미지가 있다면 아래 element 내부에서 출력될것 입니다. -->
     <div th:utext="${post.content}" />
     <p th:text="${post.writer}" />
+<!--    <img th:src="${post.filepath}" style="width:300px; height: 300px;">-->
+    <a th:href="@{${post.filepath}}">다운</a>
 </body>
 </html>
