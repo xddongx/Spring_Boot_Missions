@@ -5,7 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface PostServiceInterface {
-    void createPost(PostDto dto, MultipartFile file);
+    void createPost(PostDto dto);
     List<PostDto> readPostAll();
     PostDto readPostOne(int id);
     void updatePost(int id, PostDto dto);

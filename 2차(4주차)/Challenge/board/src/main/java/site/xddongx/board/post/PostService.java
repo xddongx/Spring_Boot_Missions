@@ -21,22 +21,7 @@ public class PostService implements PostServiceInterface {
     }
 
     @Override
-    public void createPost(PostDto dto, MultipartFile file) {
-        String projectPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\image";
-
-        UUID uuid = UUID.randomUUID();
-        String fileName = uuid + "_" + file.getOriginalFilename();
-
-        File saveFile = new File(projectPath, fileName);
-        try {
-            file.transferTo(saveFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        dto.setFilename(fileName);
-        dto.setFilepath("/image/" + fileName);
-
+    public void createPost(PostDto dto) {
         this.postRepository.save(dto);
     }
 
