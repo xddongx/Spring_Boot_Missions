@@ -6,12 +6,4 @@
 
 - - -
 ### 2차 미션 스크린샷
-#### Basic
-* Board, Post
-
-
-#### Challenge
-* Post(Board는 Basic Mission과 같음)
-
-
-
+#### [Basic Mission](https://github.com/xddongx/Spring_Boot_Missions/tree/main/2%EC%B0%A8(4%EC%A3%BC%EC%B0%A8)/Basic/board)
