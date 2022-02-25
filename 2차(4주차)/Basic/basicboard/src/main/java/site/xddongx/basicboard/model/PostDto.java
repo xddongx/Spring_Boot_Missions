@@ -1,5 +1,9 @@
 package site.xddongx.basicboard.model;
 
+import org.w3c.dom.html.HTMLDivElement;
+
+import java.util.List;
+
 public class PostDto {
     private Long id;
     private String title;

@@ -2,13 +2,16 @@ package site.xddongx.basicboard.Service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import site.xddongx.basicboard.model.MediadescriptorDto;
 
 import javax.print.attribute.standard.Media;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -37,16 +40,21 @@ public class LocalMediaService implements MediaService {
 
     @Override
     public byte[] getFileAsBytes(String resourcePath) {
-        return new byte[0];
+        try {
+            return Files.readAllBytes(Path.of(basePath, resourcePath));
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
     private MediadescriptorDto saveToDir(MultipartFile file) {
-        MediadescriptorDto dto = new MediadescriptorDto();
-        dto.setStatus(200);
-        dto.setOriginalName(file.getOriginalFilename());
+        MediadescriptorDto descriptorDto = new MediadescriptorDto();
+        descriptorDto.setStatus(200);
+        descriptorDto.setOriginalName(file.getOriginalFilename());
 
         try {
-            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime now = LocalDateTime.now();                // 중복을 방지하기 위해서
             String targetDir = Path.of(basePath, now.format(DateTimeFormatter.BASIC_ISO_DATE)).toString();
             String newFileName = now.format(DateTimeFormatter.ofPattern("HHmmss")) + "_" + file.getOriginalFilename();
             File dirNow = new File(targetDir);
@@ -54,10 +62,15 @@ public class LocalMediaService implements MediaService {
             if (!dirNow.exists()) dirNow.mkdir();
             file.transferTo(Path.of(targetDir, newFileName));
 
+            descriptorDto.setResourcePath(Path.of(targetDir, newFileName).toString().substring(1));
+
+            return descriptorDto;
 
         } catch (IOException e) {
             logger.error(e.getMessage());
+            descriptorDto.setMessage("Failed");
+            descriptorDto.setStatus(500);
+            return descriptorDto;
         }
-        return null;
     }
 }
