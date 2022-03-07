@@ -60,8 +60,13 @@ public class PostEntity extends BaseEntity {
     }
 
     public void setBoardEntity(BoardEntity boardEntity) {
+        if (this.boardEntity != null) {
+            this.boardEntity.getPostEntityList().remove(this);
+        }
         this.boardEntity = boardEntity;
+        boardEntity.addPost(this);
     }
+
 
     @Override
     public String toString() {

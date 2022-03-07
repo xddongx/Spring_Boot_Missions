@@ -53,6 +53,11 @@ public class BoardEntity extends BaseEntity {
         this.name = name;
     }
 
+    public void addPost(PostEntity postEntity) {
+        postEntityList.add(postEntity);
+
+    }
+
     public List<PostEntity> getPostEntityList() {
         return postEntityList;
     }

@@ -21,29 +21,36 @@ import java.util.Optional;
 public class PostDao {
     private static final Logger logger = LoggerFactory.getLogger(PostDao.class);
     private final PostRepository postRepository;
+    private final BoardRepository boardRepository;
     private final BoardService boardService;
     private final BoardDao boardDao;
 
     @Autowired
-    public PostDao(PostRepository postRepository, BoardService boardService, BoardDao boardDao) {
+    public PostDao(PostRepository postRepository, BoardService boardService, BoardDao boardDao, BoardRepository boardRepository) {
         this.postRepository = postRepository;
         this.boardService = boardService;
         this.boardDao = boardDao;
+        this.boardRepository = boardRepository;
     }
 
     public void createPost(Long boardId, PostDto dto) {
-        BoardEntity boardEntity = this.boardDao.readBoard(boardId);
+        Optional<BoardEntity> targetEntity = this.boardRepository.findById(boardId);
+        if (targetEntity.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        BoardEntity boardEntity = targetEntity.get();
 
-        logger.info("board entity: " + boardEntity.toString());
 
         PostEntity postEntity = new PostEntity();
         postEntity.setTitle(dto.getTitle());
         postEntity.setContent(dto.getContent());
         postEntity.setBoardEntity(boardEntity);
-
-//        this.boardService.addPostEntity(boardId, postEntity);
-
         this.postRepository.save(postEntity);
+
+        logger.info("Post Entity: " + postEntity.toString());
+        logger.info("Board Entity: " + boardEntity.toString());
+
+        this.boardRepository.save(boardEntity);
     }
 
     public PostEntity readPost(Long id) {
