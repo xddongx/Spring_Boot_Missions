@@ -8,17 +8,14 @@ public class PostEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "post_id")
+
     private Long id;
 
-    @Column
     private String title;
 
-    @Column
     private String content;
 
-    @ManyToOne(targetEntity = BoardEntity.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_id")
+    @ManyToOne
     private BoardEntity boardEntity;
 
     public PostEntity() {
@@ -60,11 +57,7 @@ public class PostEntity extends BaseEntity {
     }
 
     public void setBoardEntity(BoardEntity boardEntity) {
-        if (this.boardEntity != null) {
-            this.boardEntity.getPostEntityList().remove(this);
-        }
         this.boardEntity = boardEntity;
-        boardEntity.addPost(this);
     }
 
 

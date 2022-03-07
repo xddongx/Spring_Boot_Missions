@@ -10,13 +10,14 @@ public class BoardEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "board_id")
+    @Column
     private Long id;
 
-    @Column(name = "board_name")
+    @Column
     private String name;
 
-    @OneToMany(targetEntity = PostEntity.class, fetch = FetchType.LAZY, mappedBy = "boardEntity")
+    // mappedBy: 관계의 주인을 나타낸다. 관계의 주인은 PostEntity이다.
+    @OneToMany(mappedBy = "boardEntity")
     private List<PostEntity> postEntityList = new ArrayList<>();
 
     public BoardEntity() {
@@ -54,7 +55,8 @@ public class BoardEntity extends BaseEntity {
     }
 
     public void addPost(PostEntity postEntity) {
-        postEntityList.add(postEntity);
+        postEntity.setBoardEntity(this);            // onwer
+        getPostEntityList().add(postEntity);        // 왜 하는가?
 
     }
 

@@ -40,17 +40,14 @@ public class PostDao {
         }
         BoardEntity boardEntity = targetEntity.get();
 
-
         PostEntity postEntity = new PostEntity();
         postEntity.setTitle(dto.getTitle());
         postEntity.setContent(dto.getContent());
-        postEntity.setBoardEntity(boardEntity);
+
+        boardEntity.addPost(postEntity);
+        BoardDto newboardDto = new BoardDto(boardEntity.getId(), boardEntity.getName(), boardEntity.getPostEntityList());
+        this.boardService.updateBoard(boardId, newboardDto);
         this.postRepository.save(postEntity);
-
-        logger.info("Post Entity: " + postEntity.toString());
-        logger.info("Board Entity: " + boardEntity.toString());
-
-        this.boardRepository.save(boardEntity);
     }
 
     public PostEntity readPost(Long id) {
