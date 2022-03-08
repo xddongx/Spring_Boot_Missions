@@ -1,6 +1,7 @@
 package site.xddongx.board.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import site.xddongx.board.dto.PostDto;
 import site.xddongx.board.dto.UserDto;
 
 import javax.persistence.*;
@@ -27,6 +28,14 @@ public class UserEntity extends BaseEntity {
     private List<PostEntity> postEntityList = new ArrayList<>();
 
     public UserEntity() {
+    }
+
+    public UserEntity(Long id, String userId, String userName, String password, List<PostEntity> postEntityList) {
+        this.id = id;
+        this.userId = userId;
+        this.userName = userName;
+        this.password = password;
+        this.postEntityList = postEntityList;
     }
 
     public UserEntity(UserDto userDto) {
@@ -80,6 +89,10 @@ public class UserEntity extends BaseEntity {
     public void addUserInPost(PostEntity postEntity) {
         postEntity.setUserEntity(this);
         getPostEntityList().add(postEntity);
+    }
+
+    public UserEntity passwordMasked() {
+        return new UserEntity(this.id, this.userId, this.userName, "*****", this.postEntityList);
     }
 
     @Override

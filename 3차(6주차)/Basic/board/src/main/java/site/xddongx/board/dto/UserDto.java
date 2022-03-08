@@ -21,10 +21,12 @@ public class UserDto {
     public UserDto() {
     }
 
-    public UserDto(Long id, String userId, String userName) {
+    public UserDto(Long id, String userId, String userName, String password, List<PostEntity> postEntityList) {
         this.id = id;
         this.userId = userId;
         this.userName = userName;
+        this.password = password;
+        this.postEntityList = postEntityList;
     }
 
     public UserDto(UserEntity userEntity) {

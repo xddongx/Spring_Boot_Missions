@@ -37,7 +37,7 @@ public class UserDao {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
 
-        return userEntity.get();
+        return userEntity.get().passwordMasked();
     }
 
     public Iterator<UserEntity> readUserAll() {
