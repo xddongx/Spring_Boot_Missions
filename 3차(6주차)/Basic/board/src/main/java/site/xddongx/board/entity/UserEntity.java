@@ -1,5 +1,7 @@
 package site.xddongx.board.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,8 @@ public class UserEntity extends BaseEntity {
     private String userName;
     private String password;
 
+    @OneToMany(mappedBy = "userEntity")
+    @JsonIgnore
     private List<PostEntity> postEntityList = new ArrayList<>();
 
     public UserEntity() {
@@ -26,6 +30,14 @@ public class UserEntity extends BaseEntity {
         this.userId = userId;
         this.userName = userName;
         this.password = password;
+    }
+
+    public UserEntity(Long id, String userId, String userName, String password, List<PostEntity> postEntityList) {
+        this.id = id;
+        this.userId = userId;
+        this.userName = userName;
+        this.password = password;
+        this.postEntityList = postEntityList;
     }
 
     public Long getId() {
@@ -60,6 +72,21 @@ public class UserEntity extends BaseEntity {
         this.password = password;
     }
 
+    public List<PostEntity> getPostEntityList() {
+        return postEntityList;
+    }
+
+    public void setPostEntityList(List<PostEntity> postEntityList) {
+        this.postEntityList = postEntityList;
+    }
+
+    public void addUserInPost(PostEntity postEntity) {
+        System.out.println("Post Entity: " + postEntity.toString());
+        System.out.println("This Entity: " + this.toString());
+        postEntity.setUserEntity(this);
+        getPostEntityList().add(postEntity);
+    }
+
     @Override
     public String toString() {
         return "UserEntity{" +
@@ -67,6 +94,7 @@ public class UserEntity extends BaseEntity {
                 ", userId='" + userId + '\'' +
                 ", userName='" + userName + '\'' +
                 ", password='" + password + '\'' +
+                ", postEntityList=" + postEntityList +
                 '}';
     }
 }

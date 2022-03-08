@@ -9,6 +9,7 @@ import site.xddongx.board.dto.PostDto;
 import site.xddongx.board.entity.BoardEntity;
 import site.xddongx.board.entity.PostEntity;
 import site.xddongx.board.repository.BoardRepository;
+import site.xddongx.board.repository.PostRepository;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -19,15 +20,16 @@ import java.util.Optional;
 public class PostService {
     private final PostDao postDao;
     private final BoardRepository boardRepository;
+    private final PostRepository postRepository;
 
     @Autowired
-    public PostService(PostDao postDao, BoardRepository boardRepository) {
+    public PostService(PostDao postDao, BoardRepository boardRepository, PostRepository postRepository) {
         this.postDao = postDao;
         this.boardRepository = boardRepository;
+        this.postRepository = postRepository;
     }
 
     public void createPost(Long boardId, PostDto dto, String UserId) {
-
         this.postDao.createPost(boardId, dto, UserId);
     }
 
@@ -49,11 +51,16 @@ public class PostService {
         return postDtoList;
     }
 
-    public void updatePost(Long postId, PostDto dto) {
-        this.postDao.updatePost(postId, dto);
+    public void updatePost(Long postId, PostDto dto, String userId) {
+        this.postDao.updatePost(postId, dto, userId);
     }
 
-    public void deletePost(Long id) {
-        this.postDao.deletePost(id);
+    public void deletePost(Long id, String userId) {
+        Optional<PostEntity> targetEntity = this.postRepository.findById(id);
+        PostEntity postEntity = targetEntity.get();
+
+        if (postEntity.getUserEntity().getUserId().equals(userId)) {
+            this.postDao.deletePost(id);
+        }
     }
 }

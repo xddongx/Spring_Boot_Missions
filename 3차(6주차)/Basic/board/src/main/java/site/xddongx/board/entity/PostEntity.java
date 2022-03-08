@@ -22,6 +22,10 @@ public class PostEntity extends BaseEntity {
 //    @JsonManagedReference               // 순환참조 방지
     private BoardEntity boardEntity;
 
+    @ManyToOne
+    @JsonIgnore
+    private UserEntity userEntity;
+
     public PostEntity() {
     }
 
@@ -30,6 +34,14 @@ public class PostEntity extends BaseEntity {
         this.title = title;
         this.content = content;
         this.boardEntity = boardEntity;
+    }
+
+    public PostEntity(Long id, String title, String content, BoardEntity boardEntity, UserEntity userEntity) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.boardEntity = boardEntity;
+        this.userEntity = userEntity;
     }
 
     public Long getId() {
@@ -64,6 +76,14 @@ public class PostEntity extends BaseEntity {
         this.boardEntity = boardEntity;
     }
 
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
+
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
+    }
+
     @Override
     public String toString() {
         return "PostEntity{" +
@@ -71,6 +91,7 @@ public class PostEntity extends BaseEntity {
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
                 ", boardEntity=" + boardEntity +
+                ", userEntity=" + userEntity +
                 '}';
     }
 }
