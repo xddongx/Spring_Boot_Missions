@@ -27,12 +27,7 @@ public class BoardService {
 
     public BoardDto readBoard(Long id) {
         BoardEntity boardEntity = this.boardDao.readBoard(id);
-
-        BoardDto boardDto = new BoardDto(
-                boardEntity.getId(),
-                boardEntity.getName(),
-                boardEntity.getPostEntityList()
-        );
+        BoardDto boardDto = new BoardDto(boardEntity);
 
         return boardDto;
     }
@@ -43,7 +38,7 @@ public class BoardService {
 
         while (iterator.hasNext()) {
             BoardEntity boardEntity = iterator.next();
-            boardDtoList.add(new BoardDto(boardEntity.getId(), boardEntity.getName(), boardEntity.getPostEntityList()));
+            boardDtoList.add(new BoardDto(boardEntity));
         }
         return boardDtoList;
     }

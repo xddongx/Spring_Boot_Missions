@@ -1,6 +1,7 @@
 package site.xddongx.board.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import site.xddongx.board.dto.UserDto;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,9 +13,12 @@ public class UserEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
 
+    @Column(name = "userid")
     private String userId;
+    @Column(name = "username")
     private String userName;
     private String password;
 
@@ -25,19 +29,12 @@ public class UserEntity extends BaseEntity {
     public UserEntity() {
     }
 
-    public UserEntity(Long id, String userId, String userName, String password) {
-        this.id = id;
-        this.userId = userId;
-        this.userName = userName;
-        this.password = password;
-    }
-
-    public UserEntity(Long id, String userId, String userName, String password, List<PostEntity> postEntityList) {
-        this.id = id;
-        this.userId = userId;
-        this.userName = userName;
-        this.password = password;
-        this.postEntityList = postEntityList;
+    public UserEntity(UserDto userDto) {
+        this.id = userDto.getId();
+        this.userId = userDto.getUserId();
+        this.userName = userDto.getUserName();
+        this.password = userDto.getPassword();
+        this.postEntityList = userDto.getPostEntityList();
     }
 
     public Long getId() {
@@ -81,8 +78,6 @@ public class UserEntity extends BaseEntity {
     }
 
     public void addUserInPost(PostEntity postEntity) {
-        System.out.println("Post Entity: " + postEntity.toString());
-        System.out.println("This Entity: " + this.toString());
         postEntity.setUserEntity(this);
         getPostEntityList().add(postEntity);
     }

@@ -1,6 +1,7 @@
 package site.xddongx.board.dto;
 
 import site.xddongx.board.entity.BoardEntity;
+import site.xddongx.board.entity.PostEntity;
 import site.xddongx.board.entity.UserEntity;
 
 import javax.validation.constraints.NotBlank;
@@ -21,25 +22,12 @@ public class PostDto {
     public PostDto() {
     }
 
-    public PostDto(Long id, String title, String content) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-    }
-
-    public PostDto(Long id, String title, String content, BoardEntity boardEntity) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-        this.boardEntity = boardEntity;
-    }
-
-    public PostDto(Long id, String title, String content, BoardEntity boardEntity, UserEntity userEntity) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-        this.boardEntity = boardEntity;
-        this.userEntity = userEntity;
+    public PostDto(PostEntity postEntity) {
+        this.id = postEntity.getId();
+        this.title = postEntity.getTitle();
+        this.content = postEntity.getContent();
+        this.boardEntity = postEntity.getBoardEntity();
+        this.userEntity = postEntity.getUserEntity();
     }
 
     public Long getId() {

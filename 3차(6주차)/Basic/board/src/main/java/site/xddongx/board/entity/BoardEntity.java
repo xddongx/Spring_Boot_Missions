@@ -1,6 +1,7 @@
 package site.xddongx.board.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import site.xddongx.board.dto.BoardDto;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ public class BoardEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
+    @Column(name = "board_id")
     private Long id;
 
     @Column
@@ -26,19 +27,10 @@ public class BoardEntity extends BaseEntity {
     public BoardEntity() {
     }
 
-    public BoardEntity(String name) {
-        this.name = name;
-    }
-
-    public BoardEntity(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public BoardEntity(Long id, String name, List<PostEntity> postEntityList) {
-        this.id = id;
-        this.name = name;
-        this.postEntityList = postEntityList;
+    public BoardEntity(BoardDto boardDto) {
+        this.id = boardDto.getId();
+        this.name = boardDto.getName();
+        this.postEntityList = boardDto.getPostEntityList();
     }
 
     public Long getId() {
@@ -57,18 +49,17 @@ public class BoardEntity extends BaseEntity {
         this.name = name;
     }
 
-    public void addPost(PostEntity postEntity) {
-        postEntity.setBoardEntity(this);            // onwer
-        getPostEntityList().add(postEntity);        // 왜 하는가?
-
-    }
-
     public List<PostEntity> getPostEntityList() {
         return postEntityList;
     }
 
     public void setPostEntityList(List<PostEntity> postEntityList) {
         this.postEntityList = postEntityList;
+    }
+
+    public void addBoardInPost(PostEntity postEntity) {
+        postEntity.setBoardEntity(this);            // onwer
+        getPostEntityList().add(postEntity);        // 왜 하는가?
     }
 
     @Override

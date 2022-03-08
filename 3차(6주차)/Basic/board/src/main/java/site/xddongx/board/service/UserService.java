@@ -27,7 +27,7 @@ public class UserService {
 
     public UserDto readUser(Long id) {
         UserEntity userEntity = this.userDao.readUser(id);
-        UserDto userDto = new UserDto(userEntity.getId(), userEntity.getUserId(), userEntity.getUserName(), userEntity.getPassword());
+        UserDto userDto = new UserDto(userEntity);
         return userDto;
     }
 
@@ -37,7 +37,7 @@ public class UserService {
 
         while (iterator.hasNext()) {
             UserEntity userEntity = iterator.next();
-            userDtoList.add(new UserDto(userEntity.getId(), userEntity.getUserId(), userEntity.getUserName(), userEntity.getPassword()));
+            userDtoList.add(new UserDto(userEntity));
         }
 
         return userDtoList;

@@ -34,35 +34,38 @@ public class PostDao {
     }
 
     /**
-     *
+     * 입력받은 post를 저장하고 Board와 User를 연결해준다.
      */
     public void createPost(Long boardId, PostDto dto, String userId) {
+        // userId로 User 정보를 받아온다.
         UserEntity targetUserEntity = this.userRepository.findByUserId(userId);
 
+        // User가 있는지 확인
         if (targetUserEntity == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
 
+        // boardId로 Board 정보를 받아온다.
         Optional<BoardEntity> targetBoardEntity = this.boardRepository.findById(boardId);
 
-        // user와 board가 없거나 null이면 에러
+        // Board가 있는지 확인
         if (targetBoardEntity.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-
         BoardEntity boardEntity = targetBoardEntity.get();
 
+        // 입력받은 Poste데이터 저장
         PostEntity postEntity = new PostEntity();
         postEntity.setTitle(dto.getTitle());
         postEntity.setContent(dto.getContent());
         this.postRepository.save(postEntity);
-        logger.info("Post Entity in create method1: " + postEntity);
-        boardEntity.addPost(postEntity);
-        logger.info("Post Entity in create method2: " + postEntity);
-        targetUserEntity.addUserInPost(postEntity);
 
-        this.boardRepository.save(boardEntity);
+        // Post <-> Board, User 양방향 연결
+        targetUserEntity.addUserInPost(postEntity);
+        boardEntity.addBoardInPost(postEntity);
         this.userRepository.save(targetUserEntity);
+        this.boardRepository.save(boardEntity);
+
 
     }
 
@@ -79,7 +82,7 @@ public class PostDao {
         return this.postRepository.findAll().iterator();
     }
 
-    public void updatePost(Long id, PostDto dto, String userId) {
+    public void updatePost(Long id, PostDto dto) {
         Optional<PostEntity> targetPostEntity = this.postRepository.findById(id);
 
         if (targetPostEntity.isEmpty()) {
@@ -87,11 +90,6 @@ public class PostDao {
         }
 
         PostEntity postEntity = targetPostEntity.get();
-
-        // post user의 id와 같지 않다면 not found
-        if (!postEntity.getUserEntity().getUserId().equals(userId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
 
         postEntity.setTitle(dto.getTitle() == null ? postEntity.getTitle() : dto.getTitle());
         postEntity.setContent(dto.getContent() == null ? postEntity.getContent() : dto.getContent());

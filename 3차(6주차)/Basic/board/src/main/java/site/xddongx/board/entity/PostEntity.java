@@ -1,6 +1,7 @@
 package site.xddongx.board.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import site.xddongx.board.dto.PostDto;
 
 import javax.persistence.*;
 
@@ -10,38 +11,35 @@ public class PostEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
+    @Column(name = "post_id")
     private Long id;
 
     private String title;
 
     private String content;
 
+//    @ManyToOne(targetEntity = BoardEntity.class, fetch = FetchType.LAZY)
     @ManyToOne
+    @JoinColumn(name = "board_id")
     @JsonIgnore
 //    @JsonManagedReference               // 순환참조 방지
     private BoardEntity boardEntity;
 
+//    @ManyToOne(targetEntity = UserEntity.class, fetch = FetchType.LAZY)
     @ManyToOne
+    @JoinColumn(name = "user_id")
     @JsonIgnore
     private UserEntity userEntity;
 
     public PostEntity() {
     }
 
-    public PostEntity(Long id, String title, String content, BoardEntity boardEntity) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-        this.boardEntity = boardEntity;
-    }
-
-    public PostEntity(Long id, String title, String content, BoardEntity boardEntity, UserEntity userEntity) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-        this.boardEntity = boardEntity;
-        this.userEntity = userEntity;
+    public PostEntity(PostDto postDto) {
+        this.id = postDto.getId();
+        this.title = postDto.getTitle();
+        this.content = postDto.getContent();
+        this.boardEntity = postDto.getBoardEntity();
+        this.userEntity = postDto.getUserEntity();
     }
 
     public Long getId() {

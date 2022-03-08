@@ -35,7 +35,8 @@ public class PostService {
 
     public PostDto readPost(Long postId) {
         PostEntity postEntity = this.postDao.readPost(postId);
-        PostDto postDto = new PostDto(postEntity.getId(), postEntity.getTitle(), postEntity.getContent(), postEntity.getBoardEntity());
+        // Entity를 파라미터로 받는 생성자
+        PostDto postDto = new PostDto(postEntity);
         return postDto;
     }
 
@@ -45,16 +46,27 @@ public class PostService {
 
         while (iterator.hasNext()) {
             PostEntity postEntity = iterator.next();
-            postDtoList.add(new PostDto(postEntity.getId(), postEntity.getTitle(), postEntity.getContent(), postEntity.getBoardEntity()));
+            // Entity를 파라미터로 받는 생성자
+            postDtoList.add(new PostDto(postEntity));
         }
-
         return postDtoList;
     }
 
+    /**
+     * 글쓴이와 수정하려는 id가 같다면 수정가능
+     * */
     public void updatePost(Long postId, PostDto dto, String userId) {
-        this.postDao.updatePost(postId, dto, userId);
+        Optional<PostEntity> targetEntity = this.postRepository.findById(postId);
+        PostEntity postEntity = targetEntity.get();
+
+        if (postEntity.getUserEntity().getUserId().equals(userId)) {
+            this.postDao.updatePost(postId, dto);
+        }
     }
 
+    /**
+     * 글쓴이와 삭제하려는 id가 같다면 삭제 가능
+     * */
     public void deletePost(Long id, String userId) {
         Optional<PostEntity> targetEntity = this.postRepository.findById(id);
         PostEntity postEntity = targetEntity.get();

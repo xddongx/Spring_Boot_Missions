@@ -5,9 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
 import site.xddongx.board.dto.BoardDto;
-import site.xddongx.board.dto.PostDto;
 import site.xddongx.board.entity.BoardEntity;
-import site.xddongx.board.entity.PostEntity;
 import site.xddongx.board.repository.BoardRepository;
 
 import java.util.Iterator;
@@ -50,7 +48,6 @@ public class BoardDao {
 
         BoardEntity boardEntity = targetEntity.get();
         boardEntity.setName(dto.getName() == null ? boardEntity.getName() : dto.getName());
-//        boardEntity.setPostEntityList(dto.getPostEntityList().isEmpty() ? boardEntity.getPostEntityList() : dto.getPostEntityList());
 
         this.boardRepository.save(boardEntity);
     }
