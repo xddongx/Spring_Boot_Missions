@@ -5,7 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.server.ResponseStatusException;
+import site.xddongx.board.aspect.LogReturn;
 import site.xddongx.board.dto.BoardDto;
 import site.xddongx.board.dto.PostDto;
 import site.xddongx.board.entity.BoardEntity;
@@ -33,21 +35,29 @@ public class PostDao {
         this.boardRepository = boardRepository;
     }
 
-    public void createPost(Long boardId, PostDto dto) {
-        Optional<BoardEntity> targetEntity = this.boardRepository.findById(boardId);
-        if (targetEntity.isEmpty()) {
+    public void createPost(Long boardId, PostDto dto, String UserId) {
+        if (!UserId.isEmpty()){
+            Optional<BoardEntity> targetEntity = this.boardRepository.findById(boardId);
+
+            if (targetEntity.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            }
+            BoardEntity boardEntity = targetEntity.get();
+
+            PostEntity postEntity = new PostEntity();
+            postEntity.setTitle(dto.getTitle());
+            postEntity.setContent(dto.getContent());
+
+            this.postRepository.save(postEntity);
+
+            boardEntity.addPost(postEntity);
+
+            this.boardRepository.save(boardEntity);
+        } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-        BoardEntity boardEntity = targetEntity.get();
 
-        PostEntity postEntity = new PostEntity();
-        postEntity.setTitle(dto.getTitle());
-        postEntity.setContent(dto.getContent());
 
-        boardEntity.addPost(postEntity);
-        BoardDto newboardDto = new BoardDto(boardEntity.getId(), boardEntity.getName(), boardEntity.getPostEntityList());
-        this.boardService.updateBoard(boardId, newboardDto);
-        this.postRepository.save(postEntity);
     }
 
     public PostEntity readPost(Long id) {
@@ -73,6 +83,7 @@ public class PostDao {
         PostEntity postEntity = targetEntity.get();
         postEntity.setTitle(dto.getTitle() == null ? postEntity.getTitle() : dto.getTitle());
         postEntity.setContent(dto.getContent() == null ? postEntity.getContent() : dto.getContent());
+        postEntity.setBoardEntity(dto.getBoardEntity() == null ? postEntity.getBoardEntity() : dto.getBoardEntity());
 
         this.postRepository.save(postEntity);
     }

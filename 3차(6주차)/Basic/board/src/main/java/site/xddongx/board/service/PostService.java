@@ -26,16 +26,12 @@ public class PostService {
         this.boardRepository = boardRepository;
     }
 
-    public void createPost(Long boardId, PostDto dto) {
-        this.postDao.createPost(boardId, dto);
+    public void createPost(Long boardId, PostDto dto, String UserId) {
+
+        this.postDao.createPost(boardId, dto, UserId);
     }
 
-    public PostDto readPost(Long boardId, Long postId) {
-        Optional<BoardEntity> boardEntity = this.boardRepository.findById(boardId);
-        if (boardEntity.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
-
+    public PostDto readPost(Long postId) {
         PostEntity postEntity = this.postDao.readPost(postId);
         PostDto postDto = new PostDto(postEntity.getId(), postEntity.getTitle(), postEntity.getContent(), postEntity.getBoardEntity());
         return postDto;
@@ -53,8 +49,8 @@ public class PostService {
         return postDtoList;
     }
 
-    public void updatePost(Long id, PostDto dto) {
-        this.postDao.updatePost(id, dto);
+    public void updatePost(Long postId, PostDto dto) {
+        this.postDao.updatePost(postId, dto);
     }
 
     public void deletePost(Long id) {

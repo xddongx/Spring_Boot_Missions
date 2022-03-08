@@ -1,5 +1,7 @@
 package site.xddongx.board.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -16,6 +18,8 @@ public class PostEntity extends BaseEntity {
     private String content;
 
     @ManyToOne
+    @JsonIgnore
+//    @JsonManagedReference               // 순환참조 방지
     private BoardEntity boardEntity;
 
     public PostEntity() {
@@ -59,7 +63,6 @@ public class PostEntity extends BaseEntity {
     public void setBoardEntity(BoardEntity boardEntity) {
         this.boardEntity = boardEntity;
     }
-
 
     @Override
     public String toString() {

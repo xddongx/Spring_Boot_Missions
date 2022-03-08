@@ -52,10 +52,6 @@ public class BoardService {
         this.boardDao.updateBoard(id, dto);
     }
 
-    public void addPostEntity(Long id, PostEntity postEntity) {
-        this.boardDao.addPostEntity(id, postEntity);
-    }
-
     public void deleteBoard(Long id) {
         this.boardDao.deleteBoard(id);
     }

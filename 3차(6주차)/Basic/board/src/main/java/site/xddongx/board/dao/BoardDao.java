@@ -50,15 +50,8 @@ public class BoardDao {
 
         BoardEntity boardEntity = targetEntity.get();
         boardEntity.setName(dto.getName() == null ? boardEntity.getName() : dto.getName());
+//        boardEntity.setPostEntityList(dto.getPostEntityList().isEmpty() ? boardEntity.getPostEntityList() : dto.getPostEntityList());
 
-        this.boardRepository.save(boardEntity);
-    }
-
-    public void addPostEntity(Long id, PostEntity postEntity) {
-        Optional<BoardEntity> targetEntity = this.boardRepository.findById(id);
-
-        BoardEntity boardEntity = targetEntity.get();
-        boardEntity.getPostEntityList().add(postEntity);
         this.boardRepository.save(boardEntity);
     }
 

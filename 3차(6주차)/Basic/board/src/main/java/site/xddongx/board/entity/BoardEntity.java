@@ -1,5 +1,8 @@
 package site.xddongx.board.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +19,9 @@ public class BoardEntity extends BaseEntity {
     @Column
     private String name;
 
-    // mappedBy: 관계의 주인을 나타낸다. 관계의 주인은 PostEntity이다.
-    @OneToMany(mappedBy = "boardEntity")
+    @OneToMany(mappedBy = "boardEntity")            // mappedBy: 관계의 주인을 나타낸다. 관계의 주인은 PostEntity이다. 관계 주인에게 설정을 해줘야한다.
+    @JsonIgnore
+//    @JsonBackReference
     private List<PostEntity> postEntityList = new ArrayList<>();
 
     public BoardEntity() {
