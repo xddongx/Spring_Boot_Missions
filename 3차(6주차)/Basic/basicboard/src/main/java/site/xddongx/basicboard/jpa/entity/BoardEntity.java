@@ -42,4 +42,12 @@ public class BoardEntity {
     public void setName(String name) {
         this.name = name;
     }
+
+    public List<PostEntity> getPostEntityList() {
+        return postEntityList;
+    }
+
+    public void setPostEntityList(List<PostEntity> postEntityList) {
+        this.postEntityList = postEntityList;
+    }
 }

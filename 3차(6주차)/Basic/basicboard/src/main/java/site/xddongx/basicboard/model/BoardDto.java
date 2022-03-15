@@ -1,5 +1,7 @@
 package site.xddongx.basicboard.model;
 
+import site.xddongx.basicboard.jpa.entity.BoardEntity;
+
 public class BoardDto {
     private Long id;
     private String name;
@@ -10,6 +12,11 @@ public class BoardDto {
     public BoardDto(Long id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public BoardDto(BoardEntity boardEntity) {
+        this.id = boardEntity.getId();
+        this.name = boardEntity.getName();
     }
 
     public Long getId() {

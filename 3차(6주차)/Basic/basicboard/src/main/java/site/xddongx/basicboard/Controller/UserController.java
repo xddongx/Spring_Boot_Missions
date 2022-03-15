@@ -1,16 +1,14 @@
 package site.xddongx.basicboard.Controller;
 
-import org.apache.coyote.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import site.xddongx.basicboard.Service.UserService;
-import site.xddongx.basicboard.model.PostDto;
 import site.xddongx.basicboard.model.UserDto;
 
-import javax.websocket.server.PathParam;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -41,20 +39,25 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<List<UserDto>> readUserAll() {
-        List<UserDto> userDtoList = (List<UserDto>) this.userService.readAll();
-        if (userDtoList == null) return ResponseEntity.notFound().build();
+        Collection<UserDto> userDtoCollection = this.userService.readAll();
+        if (userDtoCollection == null) return ResponseEntity.notFound().build();
+
+        List<UserDto> userDtoList = new ArrayList<>(userDtoCollection);
 
         return ResponseEntity.ok(userDtoList);
     }
 
     @PutMapping("{id}")
     public ResponseEntity<?> updateUser(@PathVariable("id") Long id, @RequestBody UserDto userDto) {
-        return ResponseEntity.ok(null);
+        if (!this.userService.update(id, userDto)) return ResponseEntity.notFound().build();
+
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<UserDto> deleteUser(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(null);
+        if (!this.userService.delete(id)) return ResponseEntity.notFound().build();
+        return ResponseEntity.accepted().build();
     }
 
 }
