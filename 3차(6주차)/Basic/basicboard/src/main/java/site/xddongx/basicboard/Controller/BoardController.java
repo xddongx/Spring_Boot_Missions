@@ -45,7 +45,7 @@ public class BoardController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<?> deletBoard(@PathVariable("id") Long id) {
+    public ResponseEntity<?> deleteBoard(@PathVariable("id") Long id) {
         if (!boardService.delete(id)) return ResponseEntity.notFound().build();             // 왜 build 해주는가?
         return ResponseEntity.noContent().build();
     }

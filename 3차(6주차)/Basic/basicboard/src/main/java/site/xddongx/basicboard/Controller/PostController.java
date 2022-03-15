@@ -11,7 +11,7 @@ import site.xddongx.basicboard.Service.PostService;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/board/{boardId}/post")
+@RequestMapping("board/{boardId}/post")
 public class PostController {
     private static final Logger logger = LoggerFactory.getLogger(PostController.class);
     private final PostService postService;

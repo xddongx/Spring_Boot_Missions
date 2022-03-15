@@ -1,5 +1,7 @@
 package site.xddongx.basicboard.model;
 
+import site.xddongx.basicboard.jpa.entity.UserEntity;
+
 public class UserDto {
     private Long id;
     private String username;
@@ -12,6 +14,12 @@ public class UserDto {
         this.id = id;
         this.username = username;
         this.password = password;
+    }
+
+    public UserDto(UserEntity userEntity) {
+        this.id = userEntity.getId();
+        this.username = userEntity.getUsername();
+        this.password = userEntity.getPassword();
     }
 
     public Long getId() {

@@ -28,7 +28,7 @@ public class JpaUserService implements UserService {
         userEntity.setUsername(dto.getUsername());
         userEntity.setPassword(dto.getPassword());
         userEntity = this.userRepository.save(userEntity);
-        return new UserDto(userEntity.getId(), userEntity.getUsername(), userEntity.getPassword());
+        return new UserDto(userEntity);
     }
 
     @Override
@@ -37,25 +37,32 @@ public class JpaUserService implements UserService {
         if (userEntityOptional.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
         UserEntity userEntity = userEntityOptional.get();
-        return new UserDto(userEntity.getId(), userEntity.getUsername(), userEntity.getPassword());
+        return new UserDto(userEntity);
     }
 
     @Override
     public Collection<UserDto> readAll() {
         List<UserDto> userDtoList = new ArrayList<>();
-        this.userRepository.findAll().forEach(userEntity -> userDtoList.add(new UserDto(
-                userEntity.getId(), userEntity.getUsername(), userEntity.getPassword()
-        )));
-        return null;
+        this.userRepository.findAll().forEach(userEntity -> userDtoList.add(new UserDto(userEntity)));
+
+        return userDtoList;
     }
 
     @Override
     public boolean update(Long id, UserDto dto) {
-        return false;
+        Optional<UserEntity> targetEntity = this.userRepository.findById(id);
+        if (targetEntity.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+        UserEntity userEntity = targetEntity.get();
+
+        userEntity.setPassword((dto.getPassword().isEmpty() || dto.getPassword() == null) ? dto.getPassword() : userEntity.getPassword());
+
+        return true;
     }
 
     @Override
     public boolean delete(Long id) {
-        return false;
+        this.userRepository.deleteById(id);
+        return true;
     }
 }
