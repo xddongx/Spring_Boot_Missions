@@ -7,17 +7,24 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import site.xddongx.community.handler.CustomSuccessHandler;
 
 @Configuration
 @EnableWebSecurity      // 스프링 시큐리티의 설정을 조작 할 수 있다.
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
+    private final NaverOAuth2Service naverOAuth2Service;
+    private final CustomSuccessHandler customSuccessHandler;
 
     @Autowired
-    public WebSecurityConfig(CommunityUserDetailService communityUserDetailService, UserDetailsService userDetailsService) {
+    public WebSecurityConfig(CommunityUserDetailService communityUserDetailService,
+                             UserDetailsService userDetailsService,
+                             NaverOAuth2Service naverOAuth2Service,
+                             CustomSuccessHandler customSuccessHandler) {
         this.userDetailsService = userDetailsService;
+        this.naverOAuth2Service = naverOAuth2Service;
+        this.customSuccessHandler = customSuccessHandler;
     }
 
     @Override public void configure(WebSecurity web) throws Exception {
@@ -42,16 +49,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/h2-console/**").permitAll()
-                .antMatchers("/home/**", "/user/signup")
-                .anonymous()
+                .antMatchers("/home/**", "/user/signup", "/", "/css/**", "/images/**", "/js/**", "/h2-console/**")
+                .permitAll()
                 .anyRequest()
                 .authenticated()
             .and()
                 .formLogin()
                 .loginPage("/user/login")
                 .defaultSuccessUrl("/home")
+                .successHandler(customSuccessHandler)
                 .permitAll()
+            .and()
+                .oauth2Login()
+                    .userInfoEndpoint()
+                    .userService(this.naverOAuth2Service)
+                .and()
+                    .defaultSuccessUrl("/home")
             .and()
                 .logout()
                 .logoutUrl("/user/logout")
