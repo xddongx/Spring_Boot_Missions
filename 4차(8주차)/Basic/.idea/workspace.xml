@@ -4,15 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b10fd047-f819-48d0-a049-aa57c70968a8" name="변경" comment="변경">
-      <change beforePath="$PROJECT_DIR$/community/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/community/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/community/src/main/java/site/xddongx/community/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/community/src/main/java/site/xddongx/community/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/community/src/main/java/site/xddongx/community/entity/UserEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/community/src/main/java/site/xddongx/community/entity/UserEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/community/src/main/java/site/xddongx/community/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/community/src/main/java/site/xddongx/community/repository/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/community/src/main/java/site/xddongx/community/service/AreaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/community/src/main/java/site/xddongx/community/service/AreaService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/community/src/main/java/site/xddongx/community/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/community/src/main/java/site/xddongx/community/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/community/src/main/resources/application-test.yml" beforeDir="false" afterPath="$PROJECT_DIR$/community/src/main/resources/application-test.yml" afterDir="false" />
-    </list>
+    <list default="true" id="b10fd047-f819-48d0-a049-aa57c70968a8" name="변경" comment="변경" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -146,20 +138,5 @@
       <updated>1647757395579</updated>
     </task>
     <servers />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/community/src/main/java/site/xddongx/community/service/UserService.java</url>
-          <line>50</line>
-          <properties class="site.xddongx.community.service.UserService" method="readUser">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
