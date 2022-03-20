@@ -5,14 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b10fd047-f819-48d0-a049-aa57c70968a8" name="변경" comment="변경">
-      <change beforePath="$PROJECT_DIR$/../Challenge/community/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../Challenge/community/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Challenge/community/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../Challenge/community/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Challenge/community/src/main/java/site/xddongx/community/config/CommunityUserDetailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Challenge/community/src/main/java/site/xddongx/community/config/CommunityUserDetailService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Challenge/community/src/main/java/site/xddongx/community/config/WebSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Challenge/community/src/main/java/site/xddongx/community/config/WebSecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Challenge/community/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Challenge/community/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Challenge/community/src/main/resources/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Challenge/community/src/main/resources/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Challenge/community/src/main/resources/templates/login-form.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Challenge/community/src/main/resources/templates/login-form.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Challenge/community/src/main/resources/templates/signup-form.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Challenge/community/src/main/resources/templates/signup-form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../../.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
