@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import site.xddongx.community.config.AuthenticationFacade;
 import site.xddongx.community.dto.UserDto;
 import site.xddongx.community.entity.AreaEntity;
 import site.xddongx.community.entity.UserEntity;
@@ -20,13 +21,16 @@ public class UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
     private final AreaRepository areaRepository;
+    private final AuthenticationFacade authFacade;
 
     public UserService(
             UserRepository userRepository,
-            AreaRepository areaRepository
+            AreaRepository areaRepository,
+            AuthenticationFacade authFacade
     ) {
         this.userRepository = userRepository;
         this.areaRepository = areaRepository;
+        this.authFacade = authFacade;
     }
 
     public UserDto createUser(UserDto userDto){

@@ -2,6 +2,7 @@ package site.xddongx.community.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,8 +19,33 @@ public class AreaService {
     private static final Logger logger = LoggerFactory.getLogger(AreaService.class);
     private final AreaRepository areaRepository;
 
+    @Autowired
     public AreaService(AreaRepository areaRepository) {
         this.areaRepository = areaRepository;
+
+        AreaEntity areaEntityDemo1 = new AreaEntity();
+        areaEntityDemo1.setRegionMajor("서울시");
+        areaEntityDemo1.setRegionMinor("서초구");
+        areaEntityDemo1.setRegionPatch("서초동");
+        areaEntityDemo1.setLatitude(37.4877);
+        areaEntityDemo1.setLongitude(127.0174);
+        this.areaRepository.save(areaEntityDemo1);
+
+        AreaEntity areaEntityDemo2 = new AreaEntity();
+        areaEntityDemo2.setRegionMajor("서울시");
+        areaEntityDemo2.setRegionMinor("강남구");
+        areaEntityDemo2.setRegionPatch("역삼동");
+        areaEntityDemo2.setLatitude(37.4999);
+        areaEntityDemo2.setLongitude(127.0374);
+        this.areaRepository.save(areaEntityDemo2);
+
+        AreaEntity areaEntityDemo3 = new AreaEntity();
+        areaEntityDemo3.setRegionMajor("서울시");
+        areaEntityDemo3.setRegionMinor("강남구");
+        areaEntityDemo3.setRegionPatch("삼성동");
+        areaEntityDemo3.setLatitude( 37.5140);
+        areaEntityDemo3.setLongitude(127.0565);
+        this.areaRepository.save(areaEntityDemo3);
     }
 
     public AreaDto createArea(AreaDto areaDto){

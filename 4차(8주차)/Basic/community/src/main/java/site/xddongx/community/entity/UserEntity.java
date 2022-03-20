@@ -1,5 +1,8 @@
 package site.xddongx.community.entity;
 
+import net.bytebuddy.implementation.bind.annotation.Default;
+import org.springframework.stereotype.Controller;
+
 import javax.persistence.*;
 
 @Entity
@@ -9,7 +12,10 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column
     private String username;
+
+    @Column
     private String password;
 
     @ManyToOne(
@@ -19,6 +25,7 @@ public class UserEntity {
     @JoinColumn(name = "area_id")
     private AreaEntity residence;
 
+    @Column
     private Boolean isShopOwner;
 
     public UserEntity() {
@@ -30,6 +37,14 @@ public class UserEntity {
         this.password = password;
         this.residence = residence;
         this.isShopOwner = isShopOwner;
+    }
+
+    public UserEntity(Long id, String username, String password, Boolean isShopOwner) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.isShopOwner = isShopOwner != null ? isShopOwner : false;
+
     }
 
     public Long getId() {
