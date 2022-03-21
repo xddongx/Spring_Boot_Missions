@@ -1,7 +1,6 @@
-package site.xddongx.community.config;
+package site.xddongx.community.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -9,8 +8,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import site.xddongx.community.entity.UserEntity;
 import site.xddongx.community.repository.UserRepository;
-
-import java.util.ArrayList;
 
 @Service
 public class CommunityUserDetailService implements UserDetailsService {
@@ -32,7 +29,7 @@ public class CommunityUserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         final UserEntity userEntity = this.userRepository.findByUsername(username);
-        return new User(username, userEntity.getPassword(), new ArrayList<>());
+        return new CommunityUserDetails(userEntity);
     }
 
 

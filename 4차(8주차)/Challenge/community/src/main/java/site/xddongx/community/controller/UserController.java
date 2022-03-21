@@ -49,28 +49,24 @@ public class UserController {
             @RequestParam("password_check") String passwordCheck,
             @RequestParam(value = "is_shop_owner", required = false) boolean isShopOwner,
             @RequestParam("area") String area
-    ){
+    ) throws IllegalAccessException {
         if (!password.equals(passwordCheck)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new IllegalAccessException("비밀번호가 맞지 않습니다.");
         }
 
         Long areaId = Long.parseLong(area);
 
-        UserDto userDto = new UserDto();
-        userDto.setUsername(username);
-        userDto.setPassword(passwordEncoder.encode(password));
-        userDto.setIsShopOwner(isShopOwner);
-        userDto.setAreaId(areaId);
+        UserDto userDto = new UserDto(username, password, isShopOwner, areaId);
 
         this.userService.createUser(userDto);
 
         return "redirect:/home";
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<UserDto> readUser(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(this.userService.readUser(id));
-    }
+//    @GetMapping("{id}")
+//    public ResponseEntity<UserDto> readUser(@PathVariable("id") Long id) {
+//        return ResponseEntity.ok(this.userService.readUser(id));
+//    }
 //
 //    @GetMapping
 //    public ResponseEntity<Collection<UserDto>> readUserAll(){
