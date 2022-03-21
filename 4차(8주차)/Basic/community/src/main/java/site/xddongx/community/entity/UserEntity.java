@@ -31,7 +31,7 @@ public class UserEntity {
     public UserEntity() {
     }
 
-    public UserEntity(Long id, String username, String password, AreaEntity residence, Boolean isShopOwner) {
+    public UserEntity(String username, String password, AreaEntity residence, Boolean isShopOwner) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -44,8 +44,9 @@ public class UserEntity {
         this.username = username;
         this.password = password;
         this.isShopOwner = isShopOwner != null ? isShopOwner : false;
-
     }
+
+
 
     public Long getId() {
         return id;

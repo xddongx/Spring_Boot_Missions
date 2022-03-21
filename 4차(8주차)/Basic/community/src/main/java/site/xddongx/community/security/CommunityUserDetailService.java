@@ -1,4 +1,4 @@
-package site.xddongx.community.config;
+package site.xddongx.community.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,7 +38,7 @@ public class CommunityUserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         final UserEntity userEntity = this.userRepository.findByUsername(username);
-        return new User(username, userEntity.getPassword(), new ArrayList<>());
+        return new CommunityUserDetails(userEntity);
     }
 
 

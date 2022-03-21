@@ -22,14 +22,10 @@ public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserService userService, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserController(UserService userService, UserRepository userRepository) {
         this.userService = userService;
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-
-
     }
 
     @GetMapping("login")
@@ -49,18 +45,15 @@ public class UserController {
             @RequestParam("password_check") String passwordCheck,
             @RequestParam(value = "is_shop_owner", required = false) boolean isShopOwner,
             @RequestParam("area") String area
-    ){
+    ) throws IllegalAccessException {
         if (!password.equals(passwordCheck)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new IllegalAccessException("비밀번호가 맞지 않습니다.");
         }
 
         Long areaId = Long.parseLong(area);
 
-        UserDto userDto = new UserDto();
-        userDto.setUsername(username);
-        userDto.setPassword(passwordEncoder.encode(password));
-        userDto.setIsShopOwner(isShopOwner);
-        userDto.setAreaId(areaId);
+        UserDto userDto = new UserDto(username, password, isShopOwner, areaId);
+
 
         this.userService.createUser(userDto);
 

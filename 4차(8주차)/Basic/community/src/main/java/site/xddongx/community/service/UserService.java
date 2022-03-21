@@ -3,9 +3,11 @@ package site.xddongx.community.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import site.xddongx.community.config.AuthenticationFacade;
+import site.xddongx.community.config.PasswordEncoderConfig;
 import site.xddongx.community.dto.UserDto;
 import site.xddongx.community.entity.AreaEntity;
 import site.xddongx.community.entity.UserEntity;
@@ -22,29 +24,36 @@ public class UserService {
     private final UserRepository userRepository;
     private final AreaRepository areaRepository;
     private final AuthenticationFacade authFacade;
+    private final PasswordEncoder passwordEncoder;
 
     public UserService(
             UserRepository userRepository,
             AreaRepository areaRepository,
-            AuthenticationFacade authFacade
+            AuthenticationFacade authFacade,
+            PasswordEncoder passwordEncoder
     ) {
         this.userRepository = userRepository;
         this.areaRepository = areaRepository;
         this.authFacade = authFacade;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public UserDto createUser(UserDto userDto){
+
+        String username = userDto.getUsername();
+        String password = this.passwordEncoder.encode(userDto.getPassword());
+        boolean isShopOwner = userDto.getIsShopOwner();
+
         Optional<AreaEntity> areaEntityOptional = this.areaRepository.findById(userDto.getAreaId());
         if (areaEntityOptional.isEmpty())
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         AreaEntity residence = areaEntityOptional.get();
 
-        UserEntity userEntity = new UserEntity();
-        userEntity.setUsername(userDto.getUsername());
-        userEntity.setPassword(userDto.getPassword());
-        userEntity.setShopOwner(userDto.getIsShopOwner());
-        userEntity.setResidence(residence);
-        userEntity = this.userRepository.save(userEntity);
+
+        UserEntity userEntity = new UserEntity(username, password, residence, isShopOwner);
+
+        this.userRepository.save(userEntity);
+
         return new UserDto(userEntity);
     }
 
