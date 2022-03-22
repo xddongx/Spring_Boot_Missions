@@ -19,19 +19,19 @@ public class CustomSuccessHandler extends SavedRequestAwareAuthenticationSuccess
                                         HttpServletResponse response,
                                         Authentication authentication
     ) throws ServletException, IOException {
-        logger.info("===========================================================================");
-        logger.info("===========================================================================");
-        logger.info("request URI: {}");logger.info(request.getRequestURI());
-        logger.info("request Method: {}"); logger.info(request.getMethod());
-        logger.info("request PathInfo: {}"); logger.info(request.getPathInfo());
-        logger.info("request Query String: {}"); logger.info(request.getQueryString());
-        logger.info("request Context Path: {}"); logger.info(request.getContextPath());
-        logger.info("request User Principal: {}"); logger.info(request.getUserPrincipal());
-
-
-        logger.info("Security Context Holder: {}"); logger.info(request.getUserPrincipal());
-        logger.info("===========================================================================");
-        logger.info("===========================================================================");
+//        logger.info("===========================================================================");
+//        logger.info("===========================================================================");
+//        logger.info("request URI: {}");logger.info(request.getRequestURI());
+//        logger.info("request Method: {}"); logger.info(request.getMethod());
+//        logger.info("request PathInfo: {}"); logger.info(request.getPathInfo());
+//        logger.info("request Query String: {}"); logger.info(request.getQueryString());
+//        logger.info("request Context Path: {}"); logger.info(request.getContextPath());
+//        logger.info("request User Principal: {}"); logger.info(request.getUserPrincipal());
+//
+//
+//        logger.info("Security Context Holder: {}"); logger.info(request.getUserPrincipal());
+//        logger.info("===========================================================================");
+//        logger.info("===========================================================================");
 
         response.addCookie(new Cookie("likelion_login_cookie", "test_value"));
 

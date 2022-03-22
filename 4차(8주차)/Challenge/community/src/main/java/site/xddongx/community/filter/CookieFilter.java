@@ -41,29 +41,29 @@ public class CookieFilter implements Filter {
 //
 //        }
 
-//        boolean isResult = Arrays.stream(cookies).anyMatch(str -> str.getName().equals("likelion_login_cookie"));
-//
-//        if (isResult) {
-//
-//            logger.info("likelion login cookie: ");
-//        } else {
-//            logger.info("don't have likelion login cookie");
-//        }
+        boolean isResult = Arrays.stream(cookies).anyMatch(str -> str.getName().equals("likelion_login_cookie"));
 
+        if (isResult) {
 
-
-        logger.info("--------------------------------------------------------------------------");
-        logger.info("--------------------------------------------------------------------------");
-        logger.info("Request URI: {}", httpServletRequest.getRequestURI());
-        logger.info("Request Method: {}", httpServletRequest.getMethod());
-        logger.info("Request PathInfo: {}", httpServletRequest.getPathInfo());
-        logger.info("Request Query String: {}", httpServletRequest.getQueryString());
-        logger.info("Request Context Path: {}", httpServletRequest.getContextPath());
-        if (httpServletRequest.getUserPrincipal()!=null) {
-            logger.info("Request User Principal Get Name: {}", httpServletRequest.getUserPrincipal().getName());
-            logger.info("Request User Principal To String: {}", httpServletRequest.getUserPrincipal().toString());
+            logger.info("Cookie >>> likelion login cooki~~~");
+        } else {
+            logger.info("Cookie >>> don't have likelion login cookie");
         }
-        logger.info("Request User Principal: {}", httpServletRequest.getUserPrincipal());
+
+
+
+//        logger.info("--------------------------------------------------------------------------");
+//        logger.info("--------------------------------------------------------------------------");
+//        logger.info("Request URI: {}", httpServletRequest.getRequestURI());
+//        logger.info("Request Method: {}", httpServletRequest.getMethod());
+//        logger.info("Request PathInfo: {}", httpServletRequest.getPathInfo());
+//        logger.info("Request Query String: {}", httpServletRequest.getQueryString());
+//        logger.info("Request Context Path: {}", httpServletRequest.getContextPath());
+//        if (httpServletRequest.getUserPrincipal()!=null) {
+//            logger.info("Request User Principal Get Name: {}", httpServletRequest.getUserPrincipal().getName());
+//            logger.info("Request User Principal To String: {}", httpServletRequest.getUserPrincipal().toString());
+//        }
+//        logger.info("Request User Principal: {}", httpServletRequest.getUserPrincipal());
 //        Cookie[] cookies = httpServletRequest.getCookies();
 
 //        for (Cookie cookie: cookies) {
@@ -72,10 +72,10 @@ public class CookieFilter implements Filter {
 //        }
 
 
-        logger.info("Security Context Holder: {}", SecurityContextHolder.getContext().toString());
-        logger.info("Request Parameter Name: {}", httpServletRequest.getParameterNames().toString());
-        logger.info("--------------------------------------------------------------------------");
-        logger.info("--------------------------------------------------------------------------");
+//        logger.info("Security Context Holder: {}", SecurityContextHolder.getContext().toString());
+//        logger.info("Request Parameter Name: {}", httpServletRequest.getParameterNames().toString());
+//        logger.info("--------------------------------------------------------------------------");
+//        logger.info("--------------------------------------------------------------------------");
 
 
 //
