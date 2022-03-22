@@ -11,3 +11,7 @@
 ### 3차 미션 스크린샷
 #### [Basic Mission](https://github.com/xddongx/Spring_Boot_Missions/tree/main/3%EC%B0%A8(6%EC%A3%BC%EC%B0%A8)/Basic/board)
 
+- - -
+### 4차 미션 스크린샷
+#### [Basic Mission](https://github.com/xddongx/Spring_Boot_Missions/blob/main/4%EC%B0%A8(8%EC%A3%BC%EC%B0%A8)/Basic/community/README.md)
+
