@@ -13,9 +13,11 @@ import site.xddongx.community.entity.UserEntity;
 import site.xddongx.community.repository.AreaRepository;
 import site.xddongx.community.repository.UserRepository;
 
+import javax.servlet.http.Cookie;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -51,6 +53,7 @@ public class UserService {
         UserEntity userEntity = new UserEntity(username, password, residence, isShopOwner);
 
         this.userRepository.save(userEntity);
+
 
         return new UserDto(userEntity);
     }

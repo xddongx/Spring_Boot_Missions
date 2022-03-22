@@ -15,9 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.Principal;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class CookieFilter implements Filter {
@@ -27,6 +26,30 @@ public class CookieFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         String requestUUID = UUID.randomUUID().toString().split("_")[0];
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+
+
+        Cookie[] cookies = httpServletRequest.getCookies();
+
+//        for (Cookie cookie: cookies) {
+//            if (cookie.getName().equals("likelion_login_cookie")){
+//                Cookie newCookie = new Cookie(cookie.getName(), httpServletRequest.getUserPrincipal().getName());
+//                HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+//                httpServletResponse.addCookie(newCookie);
+//                logger.info("likelion login cookie: {}", cookie.getValue());
+//            }
+//
+//
+//        }
+
+//        boolean isResult = Arrays.stream(cookies).anyMatch(str -> str.getName().equals("likelion_login_cookie"));
+//
+//        if (isResult) {
+//
+//            logger.info("likelion login cookie: ");
+//        } else {
+//            logger.info("don't have likelion login cookie");
+//        }
+
 
 
         logger.info("--------------------------------------------------------------------------");
@@ -41,12 +64,12 @@ public class CookieFilter implements Filter {
             logger.info("Request User Principal To String: {}", httpServletRequest.getUserPrincipal().toString());
         }
         logger.info("Request User Principal: {}", httpServletRequest.getUserPrincipal());
-        Cookie[] cookies = httpServletRequest.getCookies();
+//        Cookie[] cookies = httpServletRequest.getCookies();
 
-        for (Cookie cookie: cookies) {
-            logger.info("Request Cookie Name: {}", cookie.getName());
-            logger.info("Request Cookie Value: {}", cookie.getValue());
-        }
+//        for (Cookie cookie: cookies) {
+//            logger.info("Request Cookie Name: {}", cookie.getName());
+//            logger.info("Request Cookie Value: {}", cookie.getValue());
+//        }
 
 
         logger.info("Security Context Holder: {}", SecurityContextHolder.getContext().toString());
@@ -54,58 +77,7 @@ public class CookieFilter implements Filter {
         logger.info("--------------------------------------------------------------------------");
         logger.info("--------------------------------------------------------------------------");
 
-//        if (SecurityContextHolder.getContext() != null ) {
-//            SecurityContextHolder.getContext().setAuthentication(new Authentication() {
-//                @Override
-//                public Collection<? extends GrantedAuthority> getAuthorities() {
-//                    return Collections.emptyList();
-//                }
-//
-//                @Override
-//                public Object getCredentials() {
-//                    return null;
-//                }
-//
-//                @Override
-//                public Object getDetails() {
-//                    return null;
-//                }
-//
-//                @Override
-//                public Object getPrincipal() {
-//                    return (Principal) () -> "dummy";
-//                }
-//
-//                @Override
-//                public boolean isAuthenticated() {
-//                    return true;
-//                }
-//
-//                @Override
-//                public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
-//
-//                }
-//
-//                @Override
-//                public String getName() {
-//                    return "dummy";
-//                }
-//            });
-//        }
 
-
-
-
-//        Cookie[] cookies = httpServletRequest.getCookies();
-//
-//        for (Cookie cookie: cookies) {
-//            if (cookie.getName().equals("likelion_login_cookie")){
-//                Cookie newCookie = new Cookie(cookie.getName(), httpServletRequest.getUserPrincipal().getName());
-//                HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-//                httpServletResponse.addCookie(newCookie);
-//                logger.info("likelion login cookie: {}", cookie.getValue());
-//            }
-//        }
 //
 //        logger.info("don't have likelion login cookie");
 //

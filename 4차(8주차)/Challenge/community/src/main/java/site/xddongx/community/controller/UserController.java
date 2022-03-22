@@ -13,8 +13,11 @@ import site.xddongx.community.entity.UserEntity;
 import site.xddongx.community.repository.UserRepository;
 import site.xddongx.community.service.UserService;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Collection;
 import java.util.Random;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("user")
@@ -48,7 +51,7 @@ public class UserController {
             @RequestParam("password") String password,
             @RequestParam("password_check") String passwordCheck,
             @RequestParam(value = "is_shop_owner", required = false) boolean isShopOwner,
-            @RequestParam("area") String area
+            @RequestParam("area") String area, HttpServletResponse response
     ) throws IllegalAccessException {
         if (!password.equals(passwordCheck)) {
             throw new IllegalAccessException("비밀번호가 맞지 않습니다.");
@@ -57,6 +60,12 @@ public class UserController {
         Long areaId = Long.parseLong(area);
 
         UserDto userDto = new UserDto(username, password, isShopOwner, areaId);
+
+        // 쿠키에 시간 정보를 주지 않으면 세션 쿠키(브라우저 종료시 모두 종료)
+        String requestUUID = UUID.randomUUID().toString().split("_")[0];
+        Cookie idCookie = new Cookie(requestUUID, String.valueOf(userDto.getUsername()));
+        response.addCookie(idCookie);
+        logger.info("response: {}", response.toString());
 
         this.userService.createUser(userDto);
 
