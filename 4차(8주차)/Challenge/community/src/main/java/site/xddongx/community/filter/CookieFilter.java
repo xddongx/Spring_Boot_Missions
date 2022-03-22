@@ -41,6 +41,12 @@ public class CookieFilter implements Filter {
             logger.info("Request User Principal To String: {}", httpServletRequest.getUserPrincipal().toString());
         }
         logger.info("Request User Principal: {}", httpServletRequest.getUserPrincipal());
+        Cookie[] cookies = httpServletRequest.getCookies();
+
+        for (Cookie cookie: cookies) {
+            logger.info("Request Cookie Name: {}", cookie.getName());
+            logger.info("Request Cookie Value: {}", cookie.getValue());
+        }
 
 
         logger.info("Security Context Holder: {}", SecurityContextHolder.getContext().toString());
@@ -94,6 +100,9 @@ public class CookieFilter implements Filter {
 //
 //        for (Cookie cookie: cookies) {
 //            if (cookie.getName().equals("likelion_login_cookie")){
+//                Cookie newCookie = new Cookie(cookie.getName(), httpServletRequest.getUserPrincipal().getName());
+//                HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+//                httpServletResponse.addCookie(newCookie);
 //                logger.info("likelion login cookie: {}", cookie.getValue());
 //            }
 //        }
