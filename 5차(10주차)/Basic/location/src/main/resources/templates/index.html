@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.w3.org/1999/xhtml"
+>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Simple Home</title>
+</head>
+<body>
+<script>
+
+    async function getLocation() {
+        console.log("click");
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+            alert("Geolocation is not supported by this browser.");
+        }
+    }
+
+    function showPosition(position) {
+        alert(`Latitude: ${position.coords.latitude}, Longitude: ${position.coords.longitude}`);
+    }
+
+<!--    await fetch(`/get-location-info?latitude=${latitude}&longitude=${longitude}`)-->
+
+</script>
+    <div sec:authorize="isAnonymous()">
+        <h2>Hello! Please, sign in!</h2>
+        <button onclick="location.href = '/user/login'">로그인</button>
+        <button onclick="location.href = '/user/signup'">회원가입</button>
+    </div>
+    <div sec:authorize="isAuthenticated()">
+        <h3>
+            Welcome back, <span sec:authentication="name"></span>!
+        </h3>
+        <form th:action="@{/user/logout}" method="post">
+            <input type="submit" th:value="로그아웃">
+        </form>
+    </div>
+<input type="button" onclick="getLocation()" value="Location">
+</body>
+</html>
