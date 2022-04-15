@@ -1,7 +1,7 @@
 package site.xddongx.auth.infra;
 
 import site.xddongx.auth.entity.UserEntity;
-import site.xddongx.auth.entity.UserRepository;
+import site.xddongx.auth.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

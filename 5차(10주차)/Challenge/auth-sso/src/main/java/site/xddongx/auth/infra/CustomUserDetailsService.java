@@ -1,7 +1,7 @@
 package site.xddongx.auth.infra;
 
 import site.xddongx.auth.entity.UserEntity;
-import site.xddongx.auth.entity.UserRepository;
+import site.xddongx.auth.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

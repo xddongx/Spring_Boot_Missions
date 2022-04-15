@@ -23,6 +23,13 @@ dependencies {
 	runtimeOnly 'mysql:mysql-connector-java'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+
+	implementation 'org.springframework.boot:spring-boot-starter-amqp'
+	implementation('org.springframework.boot:spring-boot-starter-data-redis') {
+		exclude group: 'io.lettuce', module: 'lettuce-core'
+	}
+	implementation 'redis.clients:jedis'
+	implementation 'com.google.code.gson:gson:2.9.0'
 }
 
 tasks.named('test') {

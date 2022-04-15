@@ -2,12 +2,20 @@ package site.xddongx.community.auth.filter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.server.ResponseStatusException;
 import site.xddongx.community.auth.LikelionSsoConsts;
+import site.xddongx.community.auth.service.LogoutCacheService;
+import site.xddongx.community.model.UserHash;
+import reactor.core.publisher.Mono;
 
 import javax.servlet.*;
 import javax.servlet.http.Cookie;
@@ -15,13 +23,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.Principal;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Optional;
+import java.util.*;
+
+import static site.xddongx.community.auth.LikelionSsoConsts.LIKELION_LOGIN_COOKIE;
 
 @Component
 public class SsoAuthFilter implements Filter {
     private static final Logger logger = LoggerFactory.getLogger(SsoAuthFilter.class);
+    private final WebClient authSsoWebclient;
+    private final LogoutCacheService logoutCacheService;
+
+    public SsoAuthFilter(WebClient authSsoWebclient, LogoutCacheService logoutCacheService) {
+        this.authSsoWebclient = authSsoWebclient;
+        this.logoutCacheService = logoutCacheService;
+    }
 
     @Override
     public void doFilter(
@@ -31,45 +46,42 @@ public class SsoAuthFilter implements Filter {
     ) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
-        Optional<String> authToken = authTokenFromCookie(httpRequest.getCookies());
-        if (authToken.isEmpty()) {
-            authToken = authTokenFromQuery(httpRequest, httpResponse);
-        }
+        Optional<String> authToken = getAuthToken(httpRequest, httpResponse);
 
-        if (authToken.isPresent()) {
-            logger.info("Login Token Value: {}", authToken.get());
-            this.setSsoAuthentication(authToken.get());
+        if (authToken.isEmpty()) {
+            this.setAnonymousAuthentication();
         } else {
-            logger.info("Login Token Missing");
-            SecurityContextHolder.getContext().setAuthentication(
-                    new AnonymousAuthenticationToken(
-                            "anonymous",
-                            "anonymous",
-                            Collections.singletonList(
-                                    (GrantedAuthority) () -> "ROLE_ANONYMOUS"))
+            logger.debug("LoginToken Value: {}", authToken.get());
+            this.getUserHash(authToken.get()).ifPresentOrElse(
+                    this::setSsoAuthentication, this::setAnonymousAuthentication
             );
         }
-
         chain.doFilter(request, response);
     }
 
+    private Optional<String> getAuthToken(HttpServletRequest request, HttpServletResponse response) {
+        Optional<String> authToken = request.getCookies() == null ? this.authTokenFromQuery(request, response) : this.authTokenFromCookie(request.getCookies()).or(() -> this.authTokenFromQuery(request, response));
+        if (authToken.isPresent() && this.logoutCacheService.checkUserStatus(authToken.get())) return authToken;
+        else return Optional.empty();
+    }
+
     private Optional<String> authTokenFromCookie(Cookie[] cookies){
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals(LikelionSsoConsts.LIKELION_LOGIN_COOKIE)) {
-                    logger.debug("found token in cookie");
-                    return Optional.of(cookie.getValue());
-                }
+        String authToken = null;
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals(LIKELION_LOGIN_COOKIE)) {
+                logger.debug("found token in cookie");
+                authToken = cookie.getValue();
+                break;
             }
         }
-        logger.debug("could not find token from cookie");
-        return Optional.empty();
+        if (authToken == null) logger.debug("could not find token from cookie");
+        return Optional.ofNullable(authToken);
     }
 
     private Optional<String> authTokenFromQuery(
             HttpServletRequest httpRequest,
             HttpServletResponse httpResponse
-    ) throws IOException {
+    ) {
         String queryString = httpRequest.getQueryString();
         if (queryString == null) {
             logger.debug("query string is null");
@@ -79,10 +91,10 @@ public class SsoAuthFilter implements Filter {
         for (String queryParam: queryParams) {
             String[] queryParamSplit = queryParam.split("=");
             if (queryParamSplit.length == 1) continue;
-            if (queryParamSplit[0].equals(LikelionSsoConsts.LIKELION_LOGIN_COOKIE)) {
+            if (queryParamSplit[0].equals(LIKELION_LOGIN_COOKIE)) {
                 logger.debug("found token in query");
                 String loginToken = queryParamSplit[1];
-                Cookie newTokenCookie = new Cookie(LikelionSsoConsts.LIKELION_LOGIN_COOKIE, loginToken);
+                Cookie newTokenCookie = new Cookie(LIKELION_LOGIN_COOKIE, loginToken);
                 newTokenCookie.setPath("/");
                 httpResponse.addCookie(newTokenCookie);
                 return Optional.of(queryParamSplit[1]);
@@ -92,44 +104,90 @@ public class SsoAuthFilter implements Filter {
         return Optional.empty();
     }
 
-    private void setSsoAuthentication(String tokenValue){
-        // TODO create new Authentication based on token
+    private Optional<UserHash> getUserHash(String tokenValue) {
+        ResponseEntity<UserHash> ssoResponseEntity = this.authSsoWebclient.get()
+                .uri(uriBuilder -> uriBuilder.queryParam("cookie-id", tokenValue).build())
+                .retrieve().onStatus(HttpStatus::is4xxClientError,
+                clientResponse -> {
+            if (clientResponse.statusCode().equals(HttpStatus.NOT_FOUND))
+                return Mono.empty();
+            return Mono.error(new ResponseStatusException(clientResponse.statusCode()));
+                })
+                .onStatus(HttpStatus::is5xxServerError, clientResponse -> {
+                    logger.error("Received 5xx error from SSO: {}", clientResponse.statusCode());
+                    return Mono.error(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR));
+                })
+                .toEntity(UserHash.class).block();
 
-        SecurityContextHolder.getContext().setAuthentication(new Authentication() {
-            @Override
-            public Collection<? extends GrantedAuthority> getAuthorities() {
-                return Collections.emptyList();
-            }
+        if (ssoResponseEntity == null || ssoResponseEntity.getBody() == null) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
-            @Override
-            public Object getCredentials() {
-                return null;
-            }
+        if (ssoResponseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
+            return Optional.empty();
+        } else return Optional.of(ssoResponseEntity.getBody());
+    }
 
-            @Override
-            public Object getDetails() {
-                return null;
-            }
+    private void setSsoAuthentication(UserHash userHash) {
+        SecurityContextHolder.getContext().setAuthentication(new SsoAuthentication(
+                userHash.getUsername(), new User(userHash.getUsername(), userHash.getCookieId(), new ArrayList<>())
+        ));
+    }
 
-            @Override
-            public Object getPrincipal() {
-                return (Principal) () -> "dummy";
-            }
+    private void setAnonymousAuthentication() {
+        logger.debug("Login Token Missing");
+        SecurityContextHolder.getContext().setAuthentication(
+                new AnonymousAuthenticationToken(
+                        "anonymous", "anonymous", Collections.singletonList(
+                        (GrantedAuthority) () -> "ROLE_ANONYMOUS"))
+        );
+    }
 
-            @Override
-            public boolean isAuthenticated() {
-                return true;
-            }
 
-            @Override
-            public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
+    private static class SsoAuthentication implements Authentication {
+        private final String username;
+        private final List<GrantedAuthority> grantedAuthorities;
+        private final User pricipal;
 
-            }
+        public SsoAuthentication(String username, User pricipal) {
+            this.username = username;
+            this.grantedAuthorities = new ArrayList<>();
+            this.pricipal = pricipal;
+        }
 
-            @Override
-            public String getName() {
-                return "dummy";
-            }
-        });
+        @Override
+        public Collection<? extends GrantedAuthority> getAuthorities() {
+            return this.grantedAuthorities;
+        }
+
+        @Override
+        public Object getCredentials() {
+            return null;
+        }
+
+        @Override
+        public Object getDetails() {
+            return null;
+        }
+
+        @Override
+        public Object getPrincipal() {
+            return pricipal;
+        }
+
+        @Override
+        public boolean isAuthenticated() {
+            return true;
+        }
+
+        @Override
+        public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
+
+        }
+
+        @Override
+        public String getName() {
+            return this.username;
+        }
     }
 }

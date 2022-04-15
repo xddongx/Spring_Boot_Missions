@@ -1,6 +1,7 @@
 package site.xddongx.auth.config;
 
-import site.xddongx.auth.filter.SsoCookieHandler;
+import site.xddongx.auth.filter.CustomLoginHandler;
+import site.xddongx.auth.filter.CustomLogoutHandler;
 import site.xddongx.auth.infra.CustomUserDetailsService;
 import site.xddongx.auth.infra.NaverOAuth2Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,18 +15,24 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    public static final String LIKELION_LOGIN_COOKIE = "likelion_login_cookie";
+
     private final UserDetailsService userDetailsService;
     private final NaverOAuth2Service oAuth2UserService;
-    private final SsoCookieHandler ssoCookieHandler;
+    private final CustomLoginHandler customLoginHandler;
+    private final CustomLogoutHandler customLogoutHandler;
 
+    @Autowired
     public WebSecurityConfig(
-            @Autowired CustomUserDetailsService customUserDetailsService,
-            @Autowired NaverOAuth2Service oAuth2UserService,
-            @Autowired SsoCookieHandler ssoCookieHandler
+            CustomUserDetailsService customUserDetailsService,
+            NaverOAuth2Service oAuth2UserService,
+            CustomLoginHandler customLoginHandler,
+            CustomLogoutHandler customLogoutHandler
     ){
         this.userDetailsService = customUserDetailsService;
         this.oAuth2UserService = oAuth2UserService;
-        this.ssoCookieHandler = ssoCookieHandler;
+        this.customLoginHandler = customLoginHandler;
+        this.customLogoutHandler = customLogoutHandler;
     }
 
     @Override
@@ -41,6 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/home/**",
                         "/user/signup/**",
                         "/",
+                        "check-user",
                         "/css/**",
                         "/images/**",
                         "/js/**"
@@ -52,13 +60,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/user/login")
                 .defaultSuccessUrl("/home")
-                .successHandler(ssoCookieHandler)
+                .successHandler(customLoginHandler)
                 .permitAll()
             .and()
                 .logout()
                 .logoutUrl("/user/logout")
-                .logoutSuccessUrl("/home")
-                .deleteCookies("JSEESIONID")
+                .logoutSuccessHandler(customLogoutHandler)
+                .deleteCookies(LIKELION_LOGIN_COOKIE)
                 .invalidateHttpSession(true)
                 .permitAll()
             .and()

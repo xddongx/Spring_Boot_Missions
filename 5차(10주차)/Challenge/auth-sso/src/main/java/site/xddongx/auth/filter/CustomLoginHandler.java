@@ -7,10 +7,13 @@ import org.springframework.stereotype.Component;
 import site.xddongx.auth.infra.UserCacheService;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.UUID;
+
+import static site.xddongx.auth.config.WebSecurityConfig.LIKELION_LOGIN_COOKIE;
 
 @Component
 public class CustomLoginHandler extends SavedRequestAwareAuthenticationSuccessHandler {
@@ -26,10 +29,7 @@ public class CustomLoginHandler extends SavedRequestAwareAuthenticationSuccessHa
         logger.info("onAuthenticationSuccess, create new cookie");
         String cookieId = UUID.randomUUID().toString();
 
-        Cookie loginCookie = new Cookie(
-                LIKELION_LOGIN_COOKIE,
-                cookieId
-        );
+        Cookie loginCookie = new Cookie(LIKELION_LOGIN_COOKIE, cookieId);
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         userCacheService.saveUserCache(cookieId, userDetails);
